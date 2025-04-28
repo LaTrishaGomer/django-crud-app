@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ book.title }} Details</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  <h1>{{ book.title }}</h1>
+  <p><strong>Author:</strong> {{ book.author }}</p>
+  <p><strong>Description:</strong> {{ book.description }}</p>
+  <p><strong>Published Year:</strong> {{ book.published_year }}</p>
+
+  <a href="{% url 'books_update' book.id %}">Edit Book</a> |
+  <a href="{% url 'books_delete' book.id %}">Delete Book</a>
+
+  <h2>Reviews</h2>
+  <ul>
+    {% for review in book.review_set.all %}
+      <li>{{ review.content }}</li>
+    {% empty %}
+      <li>No reviews yet.</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Add a Review</h3>
+  <form action="{% url 'add_review' book.id %}" method="POST">
+    {% csrf_token %}
+    <textarea name="content" placeholder="Write your review here..." required></textarea><br>
+    <button type="submit">Add Review</button>
+  </form>
+
+  <br>
+  <a href="{% url 'index' %}">Back to All Books</a>
+
+</body>
+</html>
+
